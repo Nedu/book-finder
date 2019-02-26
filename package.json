@@ -8,12 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
-    "mirror:prod": "webpack --config webpack.prod.js && node src/server/index.js",
-    "dev": "yarn build && node src/server/index.js",
-    "staging": "yarn build:prod && pm2 reload src/server/index.js -f --name 'wallet-ui'",
-    "production": "yarn build:prod && pm2 reload src/server/index.js -f --name 'wallet-ui",
-    "build": "webpack --config webpack.dev.js",
-    "build:prod": "webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.prod.js",
     "test": "jest --forceExit --detectOpenHandles --silent",
     "coverage": "yarn test --coverage"
   },
