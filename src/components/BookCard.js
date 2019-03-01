@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap';
 
 const BookCard = (props) => {
-    console.log(props);
     // eslint-disable-next-line react/prop-types
     const { image, authors, title, publisher, previewLink } = props;
     let bookCover;

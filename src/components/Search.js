@@ -36,7 +36,6 @@ class Search extends Component {
                 notifyFailure('Please enter something to search');
             } else {
                 const results = await axios.get(`${process.env.API_URL}?q=${search}&orderBy=newest&key=${process.env.API_KEY}`);
-                console.log(results);
                 this.setState({ results: results.data, showResults: true, isLoading: false });
             }
         } catch (err) {

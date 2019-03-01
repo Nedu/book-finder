@@ -10,7 +10,6 @@ const Container = styled.div`
 `;
 
 const BookCards = (props) => {
-    console.log(props);
     const { results } = props; // eslint-disable-line
     const {  items  } = results;
     if (!Object.keys(results).length || !items) {
