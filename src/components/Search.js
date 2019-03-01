@@ -1,6 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Col, Form, FormGroup, Input, Button } from 'reactstrap';
+import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
+import axios from 'axios';
+
+import 'react-toastify/dist/ReactToastify.css';
+import { notifyFailure } from '../utils';
+import BookCards from './BookCards';
+import Loading from './Loading';
 
 const Header = styled.h1`
     text-align: center;
@@ -9,12 +16,39 @@ const Header = styled.h1`
 
 class Search extends Component {
     state = {
-        search: ''
+        search: '',
+        results: {},
+        showResults: false,
+        isLoading: false
     }
 
-    _handleSubmit = (e, search) => {
-        e.preventDefault();
-        console.log(search);
+    signal = axios.CancelToken.source();
+
+    componentWillUnmount() {
+        this.signal.cancel('Api is being canceled');
+    }
+
+    _handleSubmit = async (e, search) => {
+        try {
+            e.preventDefault();
+            this.setState({ isLoading: true });
+            if (search.trim() === '') {
+                notifyFailure('Please enter something to search');
+            } else {
+                const results = await axios.get(`${process.env.API_URL}?q=${search}&orderBy=newest&key=${process.env.API_KEY}`);
+                console.log(results);
+                this.setState({ results: results.data, showResults: true, isLoading: false });
+            }
+        } catch (err) {
+            if (axios.isCancel(err)) {
+                console.error('Error: ', err.message);
+                this.setState({ isLoading: false });
+            } else {
+                notifyFailure()
+                this.setState({ isLoading: false });
+            }
+        }
+        
     }
 
     _handleUserInput = (e) => {
@@ -23,7 +57,10 @@ class Search extends Component {
     }
 
     render() {
-        const { search } = this.state;
+        const { search, results, showResults, isLoading } = this.state;
+        if (isLoading) {
+            return <Loading />
+        }
         return (
             <Fragment>
                 <Header>Book Finder</Header>
@@ -37,6 +74,8 @@ class Search extends Component {
                         </Col>
                     </FormGroup>
                 </Form>
+                {showResults ? <BookCards results={results}/> : null}
+                <ToastContainer />
             </Fragment>
         )
     }
