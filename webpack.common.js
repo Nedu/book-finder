@@ -75,7 +75,7 @@ module.exports = {
     extensions: [".webpack.js", ".web.js", ".mjs", ".js", ".jsx", ".json"]
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({ systemvars: true }),
     new CleanWebpackPlugin(["dist"]),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "/src/index.html"),
